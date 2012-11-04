@@ -60,7 +60,11 @@ public:
   static const int MaxPrecomputedInteger = 65535;
   static StringData *converted_integers_raw;
   static StringData *converted_integers;
-  static IntegerStringDataMap integer_string_data_map;
+
+  static IntegerStringDataMap& GetIntegerStringDataMap(){ 
+    static IntegerStringDataMap integer_string_data_map;
+    return integer_string_data_map;
+  }
 
   static bool HasConverted(int64 n) {
     return MinPrecomputedInteger <= n && n <= MaxPrecomputedInteger;
@@ -80,6 +84,7 @@ public:
       const StringData *sd = converted_integers + n;
       return sd;
     }
+    IntegerStringDataMap& integer_string_data_map = GetIntegerStringDataMap();
     IntegerStringDataMap::const_iterator it =
       integer_string_data_map.find(n);
     if (it != integer_string_data_map.end()) return it->second;
